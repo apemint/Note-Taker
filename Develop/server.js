@@ -14,6 +14,9 @@ app.use(express.json());
 
 
 //ROUTER
+require("./routes/apiRoutes")(app);     //API
+require("./routes/htmlRoutes")(app);    //HTML
+
 
 //LISTENER
 app.listen(PORT, function() {
