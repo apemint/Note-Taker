@@ -20,8 +20,10 @@ module.exports = function (app) {
         let savedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
         let listLength = (savedNotes.length).toString();
 
+        //give ids to added notes
         addNote.id = listLength;
 
+        //add new note(addNote) to saved list
         savedNotes.push(addNote);
 
         fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));
@@ -29,4 +31,22 @@ module.exports = function (app) {
 
 
     });
+
+
+    ////////Delete note 
+    app.delete("/api/notes:id", function (req, res) {
+        let savedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
+        
+        let id = (req.params.id).toString();
+
+        //removes the selected note based on id from the savednotes
+        savedNotes = savedNotes.filter(function(selected) {
+            return selected.id != id; //returns all notes that are unequal to the one selected to be deleted.
+        });
+
+        fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));   //writes to "database"
+        res.json(savedNotes);
+    });
+
+
 }
