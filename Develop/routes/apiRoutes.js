@@ -19,7 +19,7 @@ module.exports = function (app) {
         let addNote = req.body;
         let savedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
         let listLength = (savedNotes.length).toString();
-
+        
         //give ids to added notes
         addNote.id = listLength;
 
@@ -34,19 +34,20 @@ module.exports = function (app) {
 
 
     ////////Delete note 
-    app.delete("/api/notes:id", function (req, res) {
-        let savedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
-        
-        let id = (req.params.id).toString();
+app.delete("/api/notes/:id", (req, res) => {
 
-        //removes the selected note based on id from the savednotes
-        savedNotes = savedNotes.filter(function(selected) {
-            return selected.id != id; //returns all notes that are unequal to the one selected to be deleted.
-        });
+    let savedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
+    
+    let noteId = (req.params.id).toString();
+   
 
-        fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));   //writes to "database"
-        res.json(savedNotes);
-    });
+    //filters notes against selected note id and returns all that dont have that id, leaving out the deleted note
+    savedNotes = savedNotes.filter(function(selected){
+        return selected.id !== noteId;
+    })
 
-
+ // rewrites data without selected note, basically delteeting it
+    fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));
+    res.json(savedNotes);
+});
 }
