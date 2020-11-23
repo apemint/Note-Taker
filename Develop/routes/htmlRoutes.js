@@ -11,6 +11,11 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, "../public/notes.html"));
     });
 
+    //index
+    app.get("/", function (req, res) {
+        res.sendFile(path.join(__dirname, "../public/index.html"));
+    });
+
     //if no matching route is found default 
     app.get("*", function (req, res) {
         res.sendFile(path.join(__dirname, "../public/index.html"));
